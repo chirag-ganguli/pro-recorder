@@ -103,12 +103,12 @@ populateDevices();
 
 // Check for updates quietly in the background
 window.electronAPI.checkUpdates().then(update => {
-    if (update && update.available) {
+    if (update && update.available && update.version) {
         updateBtn.innerText = `✨ Update to v${update.version}`;
         updateBtn.style.display = 'block';
         updateBtn.onclick = () => window.electronAPI.openUrl(update.url);
     }
-});
+}).catch(() => {});
 
 // --- Camera Selector Logic ---
 cameraSelect.addEventListener('change', async () => {

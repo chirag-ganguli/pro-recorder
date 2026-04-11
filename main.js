@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, desktopCapturer, dialog, shell, systemPreferences } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer, dialog, shell, systemPreferences, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -20,6 +20,18 @@ app.whenReady().then(async () => {
     await systemPreferences.askForMediaAccess('camera');
     await systemPreferences.askForMediaAccess('microphone');
   }
+
+  // Explicitly allow media permissions at the Electron session level.
+  // Without this, packaged builds silently block getUserMedia requests.
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    const allowed = ['media', 'display-capture', 'mediaKeySystem'];
+    callback(allowed.includes(permission));
+  });
+
+  session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
+    const allowed = ['media', 'display-capture', 'mediaKeySystem'];
+    return allowed.includes(permission);
+  });
 
   mainWindow = new BrowserWindow({
     width: 800,
