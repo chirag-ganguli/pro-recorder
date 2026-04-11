@@ -4,7 +4,11 @@ const fs = require('fs');
 
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegStatic = require('ffmpeg-static');
-ffmpeg.setFfmpegPath(ffmpegStatic);
+
+// In packaged builds, ffmpeg-static is unpacked outside the ASAR archive.
+// The require() path still points inside app.asar, so we fix it to app.asar.unpacked.
+const ffmpegPath = ffmpegStatic.replace('app.asar', 'app.asar.unpacked');
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 let mainWindow;
 let writeStream; 

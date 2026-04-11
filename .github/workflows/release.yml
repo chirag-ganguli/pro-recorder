@@ -26,6 +26,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Sync version from git tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          npm version $VERSION --no-git-tag-version --allow-same-version
+        shell: bash
+
       - name: Build and Package the App
         run: npm run make
 

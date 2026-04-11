@@ -3,9 +3,15 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
-    asar: true,
+    asar: {
+      unpack: '**/node_modules/ffmpeg-static/**',
+    },
     icon: './assets/icon',
     osxSign: false,
+    extendInfo: {
+      NSCameraUsageDescription: 'Pro Recorder needs camera access for Picture-in-Picture overlay recordings.',
+      NSMicrophoneUsageDescription: 'Pro Recorder needs microphone access to capture audio during recordings.',
+    },
   },
   rebuildConfig: {},
   makers: [

@@ -2,7 +2,7 @@
 
 # 🎬 Pro Recorder
 
-**A highly optimized, direct-to-disk screen and meeting recorder.**
+**A highly optimized, direct-to-disk screen recorder.**
 
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-lightgrey?style=flat-square)](#)
 [![Built with Electron](https://img.shields.io/badge/Built_with-Electron-47848f?style=flat-square&logo=electron&logoColor=white)](#)
@@ -13,13 +13,13 @@
 
 ## 🚀 Overview
 
-Pro Recorder is an Electron-based desktop utility designed specifically for recording marathon, multi-hour meetings (Teams, Webex, Zoom) without crashing your computer. 
+Pro Recorder is an Electron-based desktop utility designed specifically for recording marathon, multi-hour sessions without crashing your computer. 
 
 Unlike standard web-based recorders that store video data in temporary memory (RAM) and eventually crash, Pro Recorder streams video **directly to your hard drive in 1-second chunks**. It also features a built-in FFmpeg engine to instantly convert recordings for cross-device compatibility.
 
 ## ✨ Features
 
-* **💾 Memory-Safe Direct-to-Disk Recording:** Never lose a 4-hour meeting recording to a RAM limit crash again.
+* **💾 Memory-Safe Direct-to-Disk Recording:** Never lose a 4-hour recording to a RAM limit crash again.
 * **🎯 Precision Capture:** Select specific application windows or entire monitors. Categorized neatly in the UI.
 * **🎙️ Advanced Audio Routing:** Capture any connected microphone, or route internal system audio.
 * **🎞️ Built-in FFmpeg Converter:** Convert native `.webm` recordings to `.mp4` entirely locally.
@@ -50,7 +50,7 @@ When you download and open the Mac app, you may see:
 This is because the app is not code-signed with an Apple Developer certificate. Here are three ways to fix it:
 
 #### **Solution 1: Quick Fix (Right-Click & Open)** ✨ Easiest
-1. Right-click (or `Ctrl+Click`) the `pro-screen-recorder.app` in Finder
+1. Right-click (or `Ctrl+Click`) the `Pro Recorder.app` in Finder
 2. Select **"Open"** from the menu
 3. Click **"Open"** when the security dialog appears
 4. The app will launch and works normally from then on!
@@ -58,15 +58,15 @@ This is because the app is not code-signed with an Apple Developer certificate. 
 #### **Solution 2: Terminal Command**
 Open Terminal and run:
 ```bash
-xattr -d com.apple.quarantine ~/Downloads/pro-screen-recorder.app
+xattr -cr ~/Downloads/Pro\ Recorder.app
 ```
 Then double-click to launch normally.
 
 #### **Solution 3: Remove Code Signature**
 If the above don't work, open Terminal and run:
 ```bash
-rm -rf ~/Downloads/pro-screen-recorder.app/Contents/_CodeSignature
-open ~/Downloads/pro-screen-recorder.app
+rm -rf ~/Downloads/Pro\ Recorder.app/Contents/_CodeSignature
+open ~/Downloads/Pro\ Recorder.app
 ```
 
 ### 🪟 Windows Users
@@ -83,7 +83,7 @@ Due to modern OS privacy features, you must grant the app permission to record y
 2. Under **Screen Recording**, toggle ON the switch for Pro Recorder.
 3. Repeat this exact step for **Microphone**.
 4. **Restart the app completely** for permissions to take effect.
-> **Note on System Audio:** To record the voices of others in a meeting, Apple requires a virtual audio cable. Install a free tool like [BlackHole](https://existential.audio/blackhole/). Create a "Multi-Output Device" in your Mac's Audio MIDI Setup containing your headphones + BlackHole, and select BlackHole from the app's audio dropdown.
+> **Note on System Audio:** To record the voices of others, Apple requires a virtual audio cable. Install a free tool like [BlackHole](https://existential.audio/blackhole/). Create a "Multi-Output Device" in your Mac's Audio MIDI Setup containing your headphones + BlackHole, and select BlackHole from the app's audio dropdown.
 
 ### 🪟 Windows Permissions
 1. Go to **Settings > Privacy & security**.
@@ -93,7 +93,7 @@ Due to modern OS privacy features, you must grant the app permission to record y
 
 ## ⚖️ Legal Disclaimer & Notice
 
-**Notice to Users:** Recording conversations, meetings, or screens without the explicit consent of all participants may be illegal in your jurisdiction. 
+**Notice to Users:** Recording conversations or screens without the explicit consent of all participants may be illegal in your jurisdiction. 
 
 * **Consent:** It is your sole responsibility to notify all parties that they are being recorded and to obtain necessary consent.
 * **Liability:** The developers of Pro Recorder take no responsibility for any unauthorized or illegal recordings made using this software. By using this application, you agree to comply with all local and international privacy laws.
