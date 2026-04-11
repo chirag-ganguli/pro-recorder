@@ -1,0 +1,42 @@
+name: Build and Release Electron App
+
+# This workflow triggers ONLY when you push a new version tag (e.g., v1.0.0)
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    # We are telling GitHub to run this twice: once on a Mac server, once on Windows
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build and Package the App
+        run: npm run make
+
+      - name: Upload Artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          # This grabs the compiled .exe, .dmg, and .zip files Electron Forge creates
+          files: |
+            out/**/*.exe
+            out/**/*.dmg
+            out/**/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
