@@ -9,4 +9,5 @@ build
 .DS_Store
 Thumbs.db
 .vscode
-.ideanode_modules/
+.idea
+node_modules/
