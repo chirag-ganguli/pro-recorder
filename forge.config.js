@@ -7,7 +7,11 @@ module.exports = {
       unpack: '**/node_modules/ffmpeg-static/**',
     },
     icon: './assets/icon',
-    osxSign: false,
+    extendInfo: {
+      NSCameraUsageDescription: "Pro Recorder needs access to your camera to add a webcam overlay to your screen recordings.",
+      NSMicrophoneUsageDescription: "Pro Recorder needs access to your microphone to record your voice during meetings."
+    },
+    osxSign: {},
     extendInfo: {
       NSCameraUsageDescription: 'Pro Recorder needs camera access for Picture-in-Picture overlay recordings.',
       NSMicrophoneUsageDescription: 'Pro Recorder needs microphone access to capture audio during recordings.',
