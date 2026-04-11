@@ -1,5 +1,6 @@
 name: Build and Release Electron App
 
+# This workflow triggers ONLY when you push a new version tag (e.g., v1.0.0)
 on:
   push:
     tags:
@@ -7,10 +8,10 @@ on:
 
 jobs:
   release:
+    # We are telling GitHub to run this twice: once on a Mac server, once on Windows
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # Using macos-latest (M1/M2/M3 runner) and windows-latest
         os: [macos-latest, windows-latest]
 
     steps:
@@ -21,33 +22,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
 
-      # Conditional Build Logic: Handles Windows and Mac Architectures
-      - name: Build and Package (Windows)
-        if: matrix.os == 'windows-latest'
-        run: npm run make -- --arch x64
-
-      - name: Build and Package (macOS)
-        if: matrix.os == 'macos-latest'
-        # This creates two separate builds to ensure compatibility across all Macs
-        run: |
-          npm run make -- --arch x64
-          npm run make -- --arch arm64
+      - name: Build and Package the App
+        run: npm run make
 
       - name: Upload Artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          # The glob pattern below catches all .exe, .dmg, and .zip files 
-          # generated in the 'out' directory by Electron Forge.
+          # This grabs the compiled .exe, .dmg, and .zip files Electron Forge creates
           files: |
             out/**/*.exe
             out/**/*.dmg
             out/**/*.zip
-            out/**/*.nupkg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
