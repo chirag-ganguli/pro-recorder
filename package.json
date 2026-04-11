@@ -1,7 +1,7 @@
 {
   "name": "pro-recorder",
   "productName": "Pro Recorder",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Advanced screen recorder with direct-to-disk streaming",
   "main": "main.js",
   "author": "Chirag Ganguli",
