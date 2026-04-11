@@ -1,5 +1,6 @@
 ---
 name: 🐛 Bug Report
+about: Report a bug or unexpected behavior in Pro Recorder
 description: Report a bug or unexpected behavior in Pro Recorder
 title: '[BUG]: '
 labels: ['bug', 'needs-triage']
