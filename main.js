@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, desktopCapturer, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer, dialog, shell, systemPreferences } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -13,7 +13,14 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 let mainWindow;
 let writeStream; 
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // On macOS, explicitly request camera & microphone access so the OS shows
+  // the permission prompt and the app appears in System Settings > Privacy.
+  if (process.platform === 'darwin') {
+    await systemPreferences.askForMediaAccess('camera');
+    await systemPreferences.askForMediaAccess('microphone');
+  }
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 750,

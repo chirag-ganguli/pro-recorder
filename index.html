@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Pro Recorder</title>
     <style>
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
         }
 
@@ -22,12 +25,12 @@
             --crust: #11111b;
         }
 
-        body { 
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             margin: 0;
-            padding: 25px; 
-            background: var(--bg); 
-            color: var(--text); 
+            padding: 25px;
+            background: var(--bg);
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -49,8 +52,8 @@
             padding-bottom: 15px;
         }
 
-        h2 { 
-            margin: 0; 
+        h2 {
+            margin: 0;
             font-weight: 700;
             letter-spacing: -0.5px;
             background: linear-gradient(90deg, var(--blue), var(--mauve));
@@ -68,72 +71,74 @@
             right: 20px;
             border-radius: 12px;
             border: 2px solid var(--blue);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             background: #000;
             cursor: grab;
             z-index: 10;
             object-fit: cover;
             transition: border-color 0.2s;
         }
+
         .camera-overlay:active {
             cursor: grabbing;
             border-color: var(--green);
         }
 
-        video { 
-            width: 100%; 
-            height: 380px; 
-            background: var(--crust); 
-            border-radius: 12px; 
+        video {
+            width: 100%;
+            height: 380px;
+            background: var(--crust);
+            border-radius: 12px;
             border: 1px solid var(--surface);
             object-fit: contain;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        
-        .controls { 
-            display: grid; 
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
-            gap: 12px; 
+
+        .controls {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 12px;
             width: 100%;
         }
-        
-        select, button { 
+
+        select,
+        button {
             width: 100%;
-            padding: 12px 16px; 
-            border-radius: 8px; 
-            border: 1px solid transparent; 
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid transparent;
             font-size: 14px;
             font-weight: 500;
-            outline: none; 
+            outline: none;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
         }
-        
-        select { 
-            background: var(--surface); 
-            color: var(--text); 
+
+        select {
+            background: var(--surface);
+            color: var(--text);
             border-color: var(--overlay);
-            cursor: pointer; 
+            cursor: pointer;
             appearance: none;
         }
 
         select:hover {
             border-color: var(--blue);
         }
-        
-        button { 
-            background: var(--blue); 
-            color: var(--crust); 
-            cursor: pointer; 
+
+        button {
+            background: var(--blue);
+            color: var(--crust);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        button:hover { 
+        button:hover {
             filter: brightness(1.1);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(137, 180, 250, 0.3);
@@ -143,21 +148,36 @@
             transform: translateY(0);
         }
 
-        button:disabled { 
-            background: var(--overlay); 
-            color: var(--subtext); 
-            cursor: not-allowed; 
+        button:disabled {
+            background: var(--overlay);
+            color: var(--subtext);
+            cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-        
-        .btn-danger { background: var(--red); color: var(--crust); }
-        .btn-danger:hover { box-shadow: 0 4px 12px rgba(243, 139, 168, 0.3); }
 
-        .btn-info { background: var(--mauve); color: var(--crust); }
-        .btn-info:hover { box-shadow: 0 4px 12px rgba(203, 166, 247, 0.3); }
+        .btn-danger {
+            background: var(--red);
+            color: var(--crust);
+        }
 
-        #readmeBtn { padding: 8px 16px; font-size: 12px; }
+        .btn-danger:hover {
+            box-shadow: 0 4px 12px rgba(243, 139, 168, 0.3);
+        }
+
+        .btn-info {
+            background: var(--mauve);
+            color: var(--crust);
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 4px 12px rgba(203, 166, 247, 0.3);
+        }
+
+        #readmeBtn {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
 
         .consent-wrapper {
             grid-column: span 2;
@@ -180,7 +200,7 @@
         /* Progress Bar Styling */
         #progressContainer {
             border: 1px solid var(--overlay);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         progress {
@@ -188,23 +208,30 @@
             overflow: hidden;
         }
 
-        progress::-webkit-progress-bar { background-color: var(--crust); }
-        progress::-webkit-progress-value { background-color: var(--blue); }
+        progress::-webkit-progress-bar {
+            background-color: var(--crust);
+        }
+
+        progress::-webkit-progress-value {
+            background-color: var(--blue);
+        }
 
         /* Modal Styles */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; top: 0; 
-            width: 100%; height: 100%; 
-            background-color: rgba(17, 17, 27, 0.85); 
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(17, 17, 27, 0.85);
             backdrop-filter: blur(8px);
         }
 
         .modal-content {
             background-color: var(--bg);
-            margin: 50px auto; 
+            margin: 50px auto;
             padding: 40px;
             border: 1px solid var(--overlay);
             border-radius: 16px;
@@ -212,7 +239,7 @@
             max-width: 650px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         .close-btn {
@@ -223,17 +250,47 @@
             transition: color 0.2s;
         }
 
-        .close-btn:hover { color: var(--red); }
-        
-        .modal-content h3 { color: var(--blue); margin-bottom: 20px; border-bottom: 1px solid var(--surface); padding-bottom: 10px; }
-        .modal-content h4 { color: var(--mauve); margin-top: 25px; margin-bottom: 10px; }
-        .modal-content p, .modal-content li { font-size: 14px; line-height: 1.6; color: var(--subtext); }
-        
+        .close-btn:hover {
+            color: var(--red);
+        }
+
+        .modal-content h3 {
+            color: var(--blue);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--surface);
+            padding-bottom: 10px;
+        }
+
+        .modal-content h4 {
+            color: var(--mauve);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p,
+        .modal-content li {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--subtext);
+        }
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--overlay); }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--overlay);
+        }
 
         footer {
             margin-top: 30px;
@@ -243,17 +300,20 @@
         }
     </style>
 </head>
+
 <body>
-    
+
     <div class="app-container">
         <div class="header-container">
             <h2>Pro Recorder</h2>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <button id="updateBtn" style="display: none; background: var(--green); color: var(--crust); padding: 8px 16px; font-size: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 4px 12px rgba(166, 227, 161, 0.2);">✨ Update Available</button>
+                <button id="updateBtn"
+                    style="display: none; background: var(--green); color: var(--crust); padding: 8px 16px; font-size: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 4px 12px rgba(166, 227, 161, 0.2);">✨
+                    Update Available</button>
                 <button id="readmeBtn" class="btn-info">📖 Setup Guide</button>
             </div>
         </div>
-        
+
         <div class="preview-wrapper" style="position: relative; width: 100%; margin-bottom: 20px;">
             <canvas id="compositor" style="display: none;"></canvas>
             <video id="preview" autoplay muted></video>
@@ -264,7 +324,7 @@
             <select id="sourceSelect">
                 <option value="">Select Screen or Window...</option>
             </select>
-            
+
             <select id="cameraSelect">
                 <option value="none">📷 No Camera Overlay</option>
             </select>
@@ -291,25 +351,33 @@
 
             <p id="statusText" style="grid-column: span 2; text-align: center; font-size: 13px; margin: 5px 0;"></p>
 
-            <hr style="grid-column: span 2; border: none; border-top: 1px solid var(--surface); width: 100%; margin: 10px 0;">
-            
+            <hr
+                style="grid-column: span 2; border: none; border-top: 1px solid var(--surface); width: 100%; margin: 10px 0;">
+
             <select id="convertModeSelect" style="grid-column: span 2;">
                 <option value="fast">⚡ Fast Mode (Windows / Web / VLC)</option>
                 <option value="compatible">🍏 Mac Mode (QuickTime / iPhone)</option>
             </select>
 
-            <button id="convertBtn" class="btn-info" style="grid-column: span 2; display: none;">🎬 Convert last recording to MP4</button>
-            <button id="selectFileBtn" style="grid-column: span 2; background: var(--green); color: var(--crust);">📂 Select existing WebM to Convert</button>
+            <button id="convertBtn" class="btn-info" style="grid-column: span 2; display: none;">🎬 Convert last
+                recording to MP4</button>
+            <button id="selectFileBtn" style="grid-column: span 2; background: var(--green); color: var(--crust);">📂
+                Select existing WebM to Convert</button>
 
-            <div id="progressContainer" style="grid-column: span 2; display: none; text-align: center; background: var(--surface); padding: 15px; border-radius: 12px;">
-                <progress id="conversionProgress" value="0" max="100" style="width: 100%; height: 12px; accent-color: var(--blue);"></progress>
-                <p id="progressText" style="margin: 10px 0; font-size: 14px; color: var(--blue); font-weight: bold;">0%</p>
-                <button id="cancelConvertBtn" class="btn-danger" style="width: 100%; padding: 8px;">🛑 Cancel Conversion</button>
+            <div id="progressContainer"
+                style="grid-column: span 2; display: none; text-align: center; background: var(--surface); padding: 15px; border-radius: 12px;">
+                <progress id="conversionProgress" value="0" max="100"
+                    style="width: 100%; height: 12px; accent-color: var(--blue);"></progress>
+                <p id="progressText" style="margin: 10px 0; font-size: 14px; color: var(--blue); font-weight: bold;">0%
+                </p>
+                <button id="cancelConvertBtn" class="btn-danger" style="width: 100%; padding: 8px;">🛑 Cancel
+                    Conversion</button>
             </div>
         </div>
 
         <footer style="text-align: center; font-size: 13px; color: var(--subtext);">
-            Made with ❤️ by <a href="https://chiragganguli.com" target="_blank" style="color: var(--mauve); text-decoration: none; font-weight: 600;">Chirag Ganguli</a>
+            Made with ❤️ by <a href="https://chiragganguli.com" target="_blank"
+                style="color: var(--mauve); text-decoration: none; font-weight: 600;">Chirag Ganguli</a>
         </footer>
     </div>
 
@@ -330,20 +398,25 @@
             <h4>🪟 Windows Users</h4>
             <ul>
                 <li>Go to <strong>Settings > Privacy & security</strong>.</li>
-                <li>In App permissions, turn ON <strong>Camera</strong> and <strong>Microphone</strong> access for desktop apps.</li>
+                <li>In App permissions, turn ON <strong>Camera</strong> and <strong>Microphone</strong> access for
+                    desktop apps.</li>
             </ul>
 
             <h4>🎧 System Audio (Mac)</h4>
-            <p>To record meeting participants on Mac, use a virtual audio cable like <strong>BlackHole</strong>. Create a Multi-Output Device and select BlackHole in this app.</p>
+            <p>To record meeting participants on Mac, use a virtual audio cable like <strong>BlackHole</strong>. Create
+                a Multi-Output Device and select BlackHole in this app.</p>
 
             <hr style="border: none; border-top: 1px solid var(--red); margin: 25px 0; opacity: 0.3;">
             <h4 style="color: var(--red);">⚖️ Legal Disclaimer</h4>
-            <p style="font-size: 13px; color: var(--red); background: rgba(243, 139, 168, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--red);">
-                <strong>Notice:</strong> Recording meetings without consent may be illegal. Obtain permission from all participants before recording. The developers are not responsible for unauthorized use.
+            <p
+                style="font-size: 13px; color: var(--red); background: rgba(243, 139, 168, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--red);">
+                <strong>Notice:</strong> Recording meetings without consent may be illegal. Obtain permission from all
+                participants before recording. The developers are not responsible for unauthorized use.
             </p>
         </div>
     </div>
 
     <script src="renderer.js"></script>
 </body>
+
 </html>

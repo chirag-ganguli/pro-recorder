@@ -40,11 +40,11 @@ consentCheckbox.onchange = () => {
 
 async function populateSources() {
     const sources = await window.electronAPI.getSources();
-    
+
     // Create categories
     const screenGroup = document.createElement('optgroup');
     screenGroup.label = '🖥️ Entire Screens';
-    
+
     const windowGroup = document.createElement('optgroup');
     windowGroup.label = '🪟 Application Windows';
 
@@ -53,7 +53,7 @@ async function populateSources() {
         const option = document.createElement('option');
         option.value = source.id;
         option.innerText = source.name;
-        
+
         if (source.id.startsWith('screen')) {
             screenGroup.appendChild(option);
         } else if (source.id.startsWith('window')) {
@@ -71,15 +71,15 @@ async function populateDevices() {
         let tempStream;
         try { tempStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true }); }
         catch (e) {
-            try { tempStream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e2) {}
+            try { tempStream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e2) { }
         }
-        
+
         const devices = await navigator.mediaDevices.enumerateDevices();
-        if (tempStream) tempStream.getTracks().forEach(track => track.stop()); 
+        if (tempStream) tempStream.getTracks().forEach(track => track.stop());
 
         const audioInputs = devices.filter(device => device.kind === 'audioinput');
         const videoInputs = devices.filter(device => device.kind === 'videoinput');
-        
+
         audioInputs.forEach(device => {
             const option = document.createElement('option');
             option.value = device.deviceId;
@@ -168,7 +168,7 @@ function getVideoActiveArea(video) {
 window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     const parentRect = cameraPreview.parentElement.getBoundingClientRect();
-    
+
     let newLeft = e.clientX - parentRect.left - dragOffsetX;
     let newTop = e.clientY - parentRect.top - dragOffsetY;
 
@@ -176,7 +176,7 @@ window.addEventListener('mousemove', (e) => {
     let minLeft = 0, minTop = 0;
     let maxLeft = parentRect.width - cameraPreview.offsetWidth;
     let maxTop = parentRect.height - cameraPreview.offsetHeight;
-    
+
     if (area) {
         minLeft = area.xOffset;
         minTop = area.yOffset;
@@ -186,7 +186,7 @@ window.addEventListener('mousemove', (e) => {
 
     newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
     newTop = Math.max(minTop, Math.min(newTop, maxTop));
-    
+
     cameraPreview.style.right = 'auto'; // Disable CSS right
     cameraPreview.style.left = `${newLeft}px`;
     cameraPreview.style.top = `${newTop}px`;
@@ -230,7 +230,7 @@ startBtn.onclick = async () => {
     }
 
     const canStart = await window.electronAPI.startFile();
-    if (!canStart) return; 
+    if (!canStart) return;
 
     if (previewStream) {
         previewStream.getTracks().forEach(track => track.stop());
@@ -251,8 +251,8 @@ startBtn.onclick = async () => {
         stream = await navigator.mediaDevices.getUserMedia(videoConstraints);
 
         if (audioSelect.value !== 'none') {
-            const audioStream = await navigator.mediaDevices.getUserMedia({ 
-                audio: { deviceId: { exact: audioSelect.value } } 
+            const audioStream = await navigator.mediaDevices.getUserMedia({
+                audio: { deviceId: { exact: audioSelect.value } }
             });
             stream.addTrack(audioStream.getAudioTracks()[0]);
         }
@@ -264,31 +264,31 @@ startBtn.onclick = async () => {
 
         // --- Canvas Composition Strategy ---
         if (camStream) {
-            compositorCanvas.width = videoElement.videoWidth || 1920; 
+            compositorCanvas.width = videoElement.videoWidth || 1920;
             compositorCanvas.height = videoElement.videoHeight || 1080;
-            
+
             const combinedStream = compositorCanvas.captureStream(30);
-            
+
             // Re-bind all audio tracks
             stream.getAudioTracks().forEach(track => combinedStream.addTrack(track));
 
             function renderLoop() {
                 if (!isRecording) return;
-                
+
                 // Track dynamic sizing
                 if (videoElement.videoWidth && videoElement.videoWidth !== compositorCanvas.width) {
                     compositorCanvas.width = videoElement.videoWidth;
                     compositorCanvas.height = videoElement.videoHeight;
                 }
-                
+
                 // Clear backbuffer
                 compositorCtx.clearRect(0, 0, compositorCanvas.width, compositorCanvas.height);
-                
+
                 // Render Screen
                 if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
-                   compositorCtx.drawImage(videoElement, 0, 0, compositorCanvas.width, compositorCanvas.height);
+                    compositorCtx.drawImage(videoElement, 0, 0, compositorCanvas.width, compositorCanvas.height);
                 }
-                
+
                 // Render Camera Overlay geometrically mapped
                 if (cameraPreview.videoWidth > 0 && cameraPreview.videoHeight > 0) {
                     const area = getVideoActiveArea(videoElement);
@@ -305,7 +305,7 @@ startBtn.onclick = async () => {
                     const finalY = relY * scaleY;
                     const finalW = camRect.width * scaleX;
                     const finalH = camRect.height * scaleY;
-                    
+
                     compositorCtx.save();
                     compositorCtx.beginPath();
                     if (compositorCtx.roundRect) {
@@ -314,11 +314,11 @@ startBtn.onclick = async () => {
                         compositorCtx.rect(finalX, finalY, finalW, finalH);
                     }
                     compositorCtx.clip();
-                    
+
                     const camRatio = cameraPreview.videoWidth / cameraPreview.videoHeight;
                     const targetRatio = finalW / finalH;
                     let sx = 0, sy = 0, sw = cameraPreview.videoWidth, sh = cameraPreview.videoHeight;
-                    
+
                     if (camRatio > targetRatio) {
                         sw = cameraPreview.videoHeight * targetRatio;
                         sx = (cameraPreview.videoWidth - sw) / 2;
@@ -329,7 +329,7 @@ startBtn.onclick = async () => {
 
                     compositorCtx.drawImage(cameraPreview, sx, sy, sw, sh, finalX, finalY, finalW, finalH);
                     compositorCtx.restore();
-                    
+
                     // Draw outer border ring (Glassmorphic vibe)
                     compositorCtx.strokeStyle = '#89b4fa';
                     compositorCtx.lineWidth = 3 * scaleX;
@@ -341,10 +341,10 @@ startBtn.onclick = async () => {
                     }
                     compositorCtx.stroke();
                 }
-                
+
                 renderLoopId = requestAnimationFrame(renderLoop);
             }
-            
+
             // Kickstart loop
             renderLoopId = requestAnimationFrame(renderLoop);
             finalStreamToRecord = combinedStream;
@@ -354,13 +354,13 @@ startBtn.onclick = async () => {
             mimeType: 'video/webm; codecs=vp9',
             videoBitsPerSecond: parseInt(qualitySelect.value)
         };
-        
+
         mediaRecorder = new MediaRecorder(finalStreamToRecord, options);
 
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data.size > 0) {
                 const buffer = await e.data.arrayBuffer();
-                window.electronAPI.writeChunk(buffer); 
+                window.electronAPI.writeChunk(buffer);
             }
         };
 
@@ -372,12 +372,12 @@ startBtn.onclick = async () => {
         };
 
         mediaRecorder.start(1000); // 1-second chunks to disk
-        
+
         startBtn.disabled = true;
         sourceSelect.disabled = true;
         audioSelect.disabled = true;
         stopBtn.disabled = false;
-        
+
     } catch (e) {
         console.error(e);
         alert('Error starting recording. Check Mac Privacy settings for Screen/Mic.');
@@ -390,7 +390,7 @@ stopBtn.onclick = () => {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
-    
+
     startBtn.disabled = false;
     sourceSelect.disabled = false;
     audioSelect.disabled = false;
@@ -427,9 +427,9 @@ window.electronAPI.onProgress((data) => {
     } else if (data.timemark) {
         // WebM is MISSING duration: Show indeterminate sliding bar + timestamp
         conversionProgress.removeAttribute('value'); // Makes the bar slide continuously
-        
+
         // Clean up the timestamp (remove the milliseconds at the end)
-        const cleanTime = data.timemark.split('.')[0]; 
+        const cleanTime = data.timemark.split('.')[0];
         progressText.innerText = `Converted: ${cleanTime}`;
     }
 });
@@ -458,7 +458,7 @@ async function runConversion(filePath) {
     try {
         const mode = convertModeSelect.value;
         await window.electronAPI.convertToMp4(filePath, mode);
-        
+
         statusText.innerText = `✅ Converted Successfully! Saved to same folder.`;
         statusText.style.color = '#a6e3a1';
     } catch (error) {
