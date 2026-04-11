@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  checkUpdates: () => ipcRenderer.invoke('check-updates'),
+  openUrl: (url) => ipcRenderer.invoke('open-url', url),
   getSources: () => ipcRenderer.invoke('get-sources'),
   startFile: () => ipcRenderer.invoke('start-recording-file'),
   writeChunk: (buffer) => ipcRenderer.send('write-chunk', buffer),

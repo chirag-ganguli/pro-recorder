@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, desktopCapturer, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -21,6 +21,42 @@ app.whenReady().then(() => {
     }
   });
   mainWindow.loadFile('index.html');
+});
+
+ipcMain.handle('check-updates', async () => {
+  try {
+    const response = await fetch('https://api.github.com/repos/chirag-ganguli/pro-recorder/releases/latest');
+    const data = await response.json();
+    const latestVersion = data.tag_name;
+    if (!latestVersion) return null;
+    
+    const currentVersion = app.getVersion();
+    const cleanLatest = latestVersion.replace(/^v/, '');
+    const cleanCurrent = currentVersion.replace(/^v/, '');
+    
+    const vL = cleanLatest.split('.').map(Number);
+    const vC = cleanCurrent.split('.').map(Number);
+    
+    let isNewer = false;
+    for(let i=0; i<Math.max(vL.length, vC.length); i++) {
+       const left = vL[i] || 0;
+       const right = vC[i] || 0;
+       if (left > right) { isNewer = true; break; }
+       if (left < right) { break; }
+    }
+    
+    if (isNewer) {
+        return { available: true, version: cleanLatest, url: data.html_url };
+    }
+    return { available: false };
+  } catch(e) {
+    console.error('Update check failed:', e);
+    return { available: false };
+  }
+});
+
+ipcMain.handle('open-url', (event, url) => {
+    shell.openExternal(url);
 });
 
 // Fetch screens and windows to record
