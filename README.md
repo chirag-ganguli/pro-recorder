@@ -40,9 +40,37 @@ You do not need to build this app from source. Pre-compiled, ready-to-run instal
    * **Windows:** Download the `.exe` file.
    * **macOS:** Download the `.zip` or `.dmg` file.
 
-*Note: Because this is an indie open-source app, it is not currently code-signed with paid certificates. Your operating system may show a security warning upon first launch:*
-* *__Windows Users__: If you see a blue "Windows protected your PC" screen, click **More info** -> **Run anyway**.*
-* *__Mac Users__: If it says the app cannot be opened because the developer cannot be verified, **Right-click** the app icon and select **Open**.*
+*Note: Because this is an indie open-source app, it is not currently code-signed with paid certificates. Your operating system may show a security warning upon first launch.*
+
+### 🍎 macOS: Fixing the "Damaged" App Error
+
+When you download and open the Mac app, you may see:
+> **"Pro Recorder" is damaged and can't be opened. You should move it to the Trash.**
+
+This is because the app is not code-signed with an Apple Developer certificate. Here are three ways to fix it:
+
+#### **Solution 1: Quick Fix (Right-Click & Open)** ✨ Easiest
+1. Right-click (or `Ctrl+Click`) the `pro-screen-recorder.app` in Finder
+2. Select **"Open"** from the menu
+3. Click **"Open"** when the security dialog appears
+4. The app will launch and works normally from then on!
+
+#### **Solution 2: Terminal Command**
+Open Terminal and run:
+```bash
+xattr -d com.apple.quarantine ~/Downloads/pro-screen-recorder.app
+```
+Then double-click to launch normally.
+
+#### **Solution 3: Remove Code Signature**
+If the above don't work, open Terminal and run:
+```bash
+rm -rf ~/Downloads/pro-screen-recorder.app/Contents/_CodeSignature
+open ~/Downloads/pro-screen-recorder.app
+```
+
+### 🪟 Windows Users
+If you see a blue "Windows protected your PC" screen, click **More info** → **Run anyway**.
 
 ---
 
@@ -50,14 +78,14 @@ You do not need to build this app from source. Pre-compiled, ready-to-run instal
 
 Due to modern OS privacy features, you must grant the app permission to record your screen and audio.
 
-### 🍎 macOS Users
+### 🍎 macOS Permissions
 1. Go to **System Settings > Privacy & Security**.
 2. Under **Screen Recording**, toggle ON the switch for Pro Recorder.
 3. Repeat this exact step for **Microphone**.
 4. **Restart the app completely** for permissions to take effect.
 > **Note on System Audio:** To record the voices of others in a meeting, Apple requires a virtual audio cable. Install a free tool like [BlackHole](https://existential.audio/blackhole/). Create a "Multi-Output Device" in your Mac's Audio MIDI Setup containing your headphones + BlackHole, and select BlackHole from the app's audio dropdown.
 
-### 🪟 Windows Users
+### 🪟 Windows Permissions
 1. Go to **Settings > Privacy & security**.
 2. Under App permissions, ensure "Let desktop apps access your camera/screen" and "Microphone" are turned **ON**.
 
