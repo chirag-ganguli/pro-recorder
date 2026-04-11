@@ -1,13 +1,23 @@
-node_modules
-dist
-out
-build
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+build/
+
+# Logs
 *.log
+
+# Temporary files
 *.tmp
 *.bak
 *.swp
+
+# OS files
 .DS_Store
 Thumbs.db
-.vscode
-.idea
-node_modules/
+
+# IDE
+.vscode/
+.idea/
