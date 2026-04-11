@@ -58,7 +58,7 @@ This is because the app is not code-signed with an Apple Developer certificate. 
 #### **Solution 2: Terminal Command**
 Open Terminal and run:
 ```bash
-xattr -cr ~/Downloads/Pro\ Recorder.app
+xattr -cr ~/Applications/Pro\ Recorder.app
 ```
 Then double-click to launch normally.
 

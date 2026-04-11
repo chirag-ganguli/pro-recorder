@@ -8,7 +8,6 @@ on:
 
 jobs:
   release:
-    # We are telling GitHub to run this twice: once on a Mac server, once on Windows
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -22,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
@@ -32,17 +32,28 @@ jobs:
           npm version $VERSION --no-git-tag-version --allow-same-version
         shell: bash
 
-      - name: Build and Package the App
-        run: npm run make
+      # --- Conditional Build Logic ---
+      
+      - name: Build and Package (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npm run make -- --arch x64
+
+      - name: Build and Package (macOS)
+        if: matrix.os == 'macos-latest'
+        # This explicitly builds for both Intel and Apple Silicon Macs
+        run: |
+          npm run make -- --arch x64
+          npm run make -- --arch arm64
 
       - name: Upload Artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          # This grabs the compiled .exe, .dmg, and .zip files Electron Forge creates
+          # This grabs the compiled .exe, .dmg, .zip, and Windows .nupkg files
           files: |
             out/**/*.exe
             out/**/*.dmg
             out/**/*.zip
+            out/**/*.nupkg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

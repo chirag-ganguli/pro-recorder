@@ -24,12 +24,12 @@ app.whenReady().then(async () => {
   // Explicitly allow media permissions at the Electron session level.
   // Without this, packaged builds silently block getUserMedia requests.
   session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-    const allowed = ['media', 'display-capture', 'mediaKeySystem'];
+    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; // Added missing strings
     callback(allowed.includes(permission));
   });
 
   session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
-    const allowed = ['media', 'display-capture', 'mediaKeySystem'];
+    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; // Added missing strings
     return allowed.includes(permission);
   });
 
