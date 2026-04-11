@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Advanced screen recorder with direct-to-disk streaming",
   "main": "main.js",
+  "author": "Chirag Ganguli",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
