@@ -12,6 +12,22 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 let mainWindow;
 let writeStream; 
+let currentFilePath;
+
+// --- NEW: Wrap window creation in a reusable function ---
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 750,
+    icon: path.join(__dirname, 'assets', 'icon.png'), 
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  });
+  mainWindow.loadFile('index.html');
+}
 
 app.whenReady().then(async () => {
   // On macOS, explicitly request camera & microphone access so the OS shows
@@ -24,26 +40,25 @@ app.whenReady().then(async () => {
   // Explicitly allow media permissions at the Electron session level.
   // Without this, packaged builds silently block getUserMedia requests.
   session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; // Added missing strings
+    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; 
     callback(allowed.includes(permission));
   });
 
   session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
-    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; // Added missing strings
+    const allowed = ['media', 'display-capture', 'mediaKeySystem', 'camera', 'microphone']; 
     return allowed.includes(permission);
   });
 
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 750,
-    icon: path.join(__dirname, 'assets', 'icon.png'), 
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false
+  // --- NEW: Call the function to create the initial window ---
+  createWindow();
+
+  // --- NEW: Listen for macOS dock clicks ---
+  app.on('activate', () => {
+    // If the app is active but no windows are open (e.g., user clicked the red 'X'), recreate the window
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
     }
   });
-  mainWindow.loadFile('index.html');
 });
 
 ipcMain.handle('check-updates', async () => {
@@ -199,6 +214,7 @@ ipcMain.on('stop-recording-file', () => {
   }
 });
 
+// Keep app alive in dock on Mac when all windows are closed
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
