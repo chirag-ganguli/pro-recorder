@@ -1,5 +1,6 @@
 ---
 name: ✨ Feature Request
+about: Suggest a new feature or improvement for Pro Recorder
 description: Suggest a new feature or improvement for Pro Recorder
 title: '[FEATURE]: '
 labels: ['enhancement', 'needs-triage']
